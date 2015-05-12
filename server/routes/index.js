@@ -8,6 +8,7 @@ router.get('/', function (req, res) {
     res.redirect("app/index.html")
 });
 
+/*==================Authenticate User====================*/
 router.post('/authenticate', function (req, res) {
 
     //finds a single user in the database and returns it
@@ -22,6 +23,21 @@ router.post('/authenticate', function (req, res) {
             res.status(401).send('Wrong user or password');
         }
 
+    });
+
+});
+
+/*=====================Register User=====================*/
+router.post('/register', function (req, res) {
+
+    var user = new User(req.body);
+
+    user.save(function (err) {
+        if (err) {
+            res.json({code: 500, message: err});
+        } else {
+            res.json({code: 200, message: 'User created'});
+        }
     });
 
 });
