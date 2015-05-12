@@ -50,6 +50,8 @@ angular.module('myAppRename.controllers', []).
     };
 
     $scope.logout = function () {
+      $scope.user.username = "";
+      $scope.user.password = "";
       $scope.isAuthenticated = false;
       $scope.isAdmin =false;
       $scope.isUser = false;

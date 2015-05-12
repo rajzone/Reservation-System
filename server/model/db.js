@@ -1,19 +1,14 @@
 var mongoose = require( 'mongoose' );
 
+/* How To Create A User In Database */
+
 /*
+ Start your MongoDB database.
+ Start mongo.exe and do:
+ use database
+ db.users.insert({username : "Mathias", password :"test", email: "kontakt@mathiaspedersen.dk", role: "admin", created : new Date()})
+ */
 
-Note:
-To this test project as it is:
-
-Start your MongoDB database.
-Start mongo.exe and do:
-  use testdb
-  db.testusers.insert({userName : "Lars", email :"lam@cphbusiness.dk",pw: "test",created : new Date()})
-  db.testusers.insert({userName : "Henrik", email :"hsty@cphbusiness.dk",pw: "test",created : new Date()})
-  db.testusers.insert({userName : "Tobias", email :"tog@cphbusiness.dk",pw: "test",created : new Date()})
-  db.testusers.insert({userName : "Anders", email :"aka@cphbusiness.dk",pw: "test",created : new Date()})
-
-*/
 var dbURI;
 
 //This is set by the backend tests
@@ -21,7 +16,7 @@ if( typeof global.TEST_DATABASE != "undefined" ) {
   dbURI = global.TEST_DATABASE;
 }
 else{
-  dbURI = 'mongodb://localhost/testdb';
+  dbURI = 'mongodb://localhost/database';
 }
 
 mongoose.connect(dbURI);
@@ -47,14 +42,13 @@ process.on('SIGINT', function() {
 });
 
 
-/** User SCHEMA **/
-/** Replace this Schema with your own(s) **/
+/* Schema for user */
 var usersSchema = new mongoose.Schema({
-  userName : String,
+  username : {type: String, unique: true},
+  password: String,
   email: {type: String, unique: true},
-  pw: String,
+  role: String,
   created: { type: Date, default: new Date() }
 });
 
-mongoose.model( 'User', usersSchema,"testusers" );
-
+mongoose.model( 'User', usersSchema,"users" );
