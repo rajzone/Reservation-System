@@ -51,13 +51,14 @@ process.on('SIGINT', function () {
 /*=================User Schema=================*/
 
 /*Properties required to create user in database
-* Username, Password & Email */
+* Username, Password, verified & Email */
 
 var usersSchema = new mongoose.Schema({
     username: {type: String, unique: true, required: true},
     password: {type: String, required: true},
     email: {type: String, unique: true, required: true},
     role: {type: String, default: 'user'},
+    verified: {type: String, required: true},
     created: {type: Date, default: new Date()}
 }, {versionKey: false});
 
