@@ -9,6 +9,12 @@ var mongoose = require('mongoose');
  db.users.insert({username : "Mathias", password :"test", email: "kontakt@mathiaspedersen.dk", role: "admin", created : new Date()})
  */
 
+/*
+MongoLab credentials
+Username: admin
+Password: pass
+*/
+
 var dbURI;
 
 //This is set by the backend tests
@@ -16,7 +22,7 @@ if (typeof global.TEST_DATABASE != "undefined") {
     dbURI = global.TEST_DATABASE;
 }
 else {
-    dbURI = 'mongodb://localhost/database';
+    dbURI = 'mongodb://admin:pass@ds047948.mongolab.com:47948/semesterprojekt';
 }
 
 mongoose.connect(dbURI);
