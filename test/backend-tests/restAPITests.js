@@ -8,8 +8,9 @@ var testPort = 9999;
 var testServer;
 var mongoose = require("mongoose");
 var User = mongoose.model("User");
+var nock = require('nock');
 
-describe('REST API for /user', function () {
+describe('REST API for users', function () {
   //Start the Server before the TESTS
   before(function (done) {
 
@@ -23,13 +24,16 @@ describe('REST API for /user', function () {
   })
 
   beforeEach(function(done){
-    User.remove({}, function ()
-    {
-      var array = [{userName : "Lars", email :"lars@a.dk",pw: "xxx"},{userName : "Henrik", email :"henrik@a.dk",pw: "xxx"}];
-      User.create(array,function(err){
-        done();
-      });
-    });
+
+      //TODO: setup the testbackendservers in the DB
+      /**
+       * {
+       *    airline: String,
+       *    hostname: String
+       *
+       * }
+       *
+       * **/
   })
 
   after(function(){  //Stop server after the test
@@ -38,16 +42,52 @@ describe('REST API for /user', function () {
     testServer.close();
   })
 
-  it("Should get 2 users; Lars and Henrik", function (done) {
-    http.get("http://localhost:"+testPort+"/adminApi/user",function(res){
-      res.setEncoding("utf8");//response data is now a string
-      res.on("data",function(chunk){
-        var n = JSON.parse(chunk);
-        n.length.should.equal(2);
-        n[0].userName.should.equal("Lars");
-        n[1].userName.should.equal("Henrik");
-        done();
+  describe('Testing only the that the RESTful API makes the correct http calls to the backend server', function(){
+
+      describe('/flights/:airport/:date', function(){
+
+          it('should call the test-backendserver on api/flights/:airport/:date',function(){
+
+              //TODO: nock
+              //TODO: http-kald
+              //TODO: assertions
+          });
       });
-    })
+      describe('/flights/:from/:to/:date', function(){
+
+          it('should call the test-backendserver on api/flights/:startAirport/:endAirport/:date',function(){
+
+              //TODO: nock
+              //TODO: http-kald
+              //TODO: assertions
+          });
+      });
+      describe('/flights/:airline/:reservationId', function(){
+
+          it('should call the test-backendserver on api/flights/:reservationId',function(){
+
+              //TODO: nock
+              //TODO: http-kald
+              //TODO: assertions
+          });
+      });
+      describe('/flights/:airline/:flightId', function(){
+
+          it('should POST to the test-backendserver on api/flights/:flightId',function(){
+
+              //TODO: nock
+              //TODO: http-kald
+              //TODO: assertions
+          });
+      });
+      describe('/flights/:airline/:reservationId', function(){
+
+          it('should DELETE to the test-backendserver on api/flights/:reservationId',function(){
+
+              //TODO: nock
+              //TODO: http-kald
+              //TODO: assertions
+          });
+      });
   });
 });
