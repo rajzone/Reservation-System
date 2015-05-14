@@ -17,27 +17,27 @@ router.get('/test', function(req, res) {
 
 router.get('/flights/:airport/:date', function(req,res){
 
-    console.log('rout.get ost');
     var jsonArr = [];
 
     res.header("Content-type","application/json");
     restArr.forEach(function(element){
 
-        console.log('server ost:'+element.airline);
         var options = {
 
-            hostname: element.URL,
+            host: element.URL,
             path: restPath+req.params.airport+'/'+req.params.date
         };
-        console.log('options ost: '+options.hostname);
+        console.log('ost'+options.host+options.path);
         http.get(options, function(resp){
 
             resp.on('data', function(data){
 
+                console.log('data ost'+data,data);
                 data.forEach(function(element){
 
                     jsonArr.push(element);
                 });
+
             });
         }).on('error',function(err){
 
@@ -45,7 +45,7 @@ router.get('/flights/:airport/:date', function(req,res){
             console.log('some error ost: '+err.message);
         });
     });
-    console.log('jsonArr ost: '+jsonArr);
+    //TODO: Dette virker ikke da det er asynchronized
     res.end(JSON.stringify(jsonArr));
 });
 
@@ -81,7 +81,40 @@ router.get('/flights/:from/:to/:date', function(req,res){
 
 router.post('/reservation/:airline/:flightId', function(req,res){
 
-    //
+    var airline;
+    restArr.forEach(function(element){
+
+        if(element.airline===req.params.airline){
+            airline = element;
+        }
+    });
+    if(typeof airline === 'undefined'){
+        res.end('airline not known');
+    }else{
+
+        var options = {
+
+            hostname: airline.URL,
+            path: restPath+req.params.flightId
+        }
+        http.post(options, function(resp){
+
+            on('data', function(data){
+
+                reservation = data;
+
+                res.end(JSON.stringify(reservation));
+            });
+
+        }).on('error', function(err){
+
+            //error handling?
+            console.log('some error ost: '+err.message);
+
+            res.end(JSON.stringify(err));
+        });
+        res.end(JSON.stringify());
+    }
 });
 
 router.get('reservation/:airline/:reservationId', function(req,res){
