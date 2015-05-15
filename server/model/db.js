@@ -61,5 +61,9 @@ var usersSchema = new mongoose.Schema({
     verified: {type: String, required: true},
     created: {type: Date, default: new Date()}
 }, {versionKey: false});
-
+var airlineSchema = new mongoose.Schema({
+    airline: {type:String, unique: true, required:true},
+    URL: {type:String, unique:true, required:true}
+});
 mongoose.model('User', usersSchema, "users");
+mongoose.model('Airline', airlineSchema, "airlines");

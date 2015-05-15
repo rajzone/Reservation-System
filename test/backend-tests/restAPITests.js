@@ -10,12 +10,15 @@ var testPort = 9999;
 var testServer;
 var mongoose = require("mongoose");
 var User = mongoose.model("User");
+var Airline = mongoose.model('Airline');
 var nock = require('nock');
 
 describe('REST API for users', function () {
   //Start the Server before the TESTS
   before(function (done) {
 
+
+      Airline.create({airline:'MMJ', URL: 'http://airline-mich1104.rhcloud.com'});
       nock.enableNetConnect();
       testServer = app.listen(testPort, function () {
       console.log("Server is listening on: " + testPort);
@@ -29,21 +32,13 @@ describe('REST API for users', function () {
 
   beforeEach(function(done){
 
-      //TODO: setup the testbackendservers in the DB
-      /**
-       * {
-       *    airline: String,
-       *    hostname: String
-       *
-       * }
-       *
-       * **/
-        done();
+
+      done();
    });
 
   after(function(){  //Stop server after the test
     //Uncomment the line below to completely remove the database, leaving the mongoose instance as before the tests
-    //mongoose.connection.db.dropDatabase();
+    mongoose.connection.db.dropDatabase();
     testServer.close();
   });
 
@@ -55,12 +50,12 @@ describe('REST API for users', function () {
           var date = 123456;
 
           //    Mocker kaldet væk, men det ser ud til ikke at virke
-          var nocked = nock('http://airline-mich1104.rhcloud.com')
+          var couchbackend = nock('http://airline-mich1104.rhcloud.com')
               .get('/api/flights/CPH/123456')
-              .reply(404,JSON.stringify({
+              .reply(200,{
 
-                  foo: true
-              }));
+                  foo:true
+              });
           it('should call the test-backendserver on api/flights/:airport/:date',function(done){
 
               var options = {
@@ -74,7 +69,7 @@ describe('REST API for users', function () {
                   resp.on('data', function(data){
 
                       console.log('asd',data);
-                      console.log();
+                      console.log('asd2', resp.data);
                       true.should.equal(true);
                       done();
                   });
