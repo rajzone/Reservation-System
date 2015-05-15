@@ -30,6 +30,13 @@ router.get('/flights/:airport/:date', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
+        }else if(typeof airline == 'undefined'||airline==null){
+
+            var msg = {
+                code: 500,
+                msg: 'No servers found'
+            };
+            res.end(JSON.stringify(msg));
         }else{
             console.log('asd REST_userblah else');
             var counter = 0;
@@ -84,6 +91,13 @@ router.get('/flights/:from/:to/:date', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
+        }else if(typeof airline == 'undefined'||airline==null){
+
+            var msg = {
+                code: 500,
+                msg: 'No servers found'
+            };
+            res.end(JSON.stringify(msg));
         }else{
             console.log('asd REST_userblah else');
             var counter = 0;
@@ -136,6 +150,13 @@ router.post('/reservation/:airline/:flightId', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
+        }else if(typeof airline == 'undefined'||airline==null){
+
+            var msg = {
+                code: 404,
+                msg: 'Airline not found'
+            };
+            res.end(JSON.stringify(msg));
         }else{
 
             var options = {
@@ -165,7 +186,7 @@ router.post('/reservation/:airline/:flightId', function(req,res){
     });
 });
 
-router.get('reservation/:airline/:reservationId', function(req,res){
+router.get('/reservation/:airline/:reservationId', function(req,res){
 
     res.setHeader('Content-Type', 'application/json');
     Airlines.findOne({airline: req.params.airline}, function(err, airline){
@@ -176,6 +197,13 @@ router.get('reservation/:airline/:reservationId', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
+        }else if(typeof airline == 'undefined'||airline==null){
+
+            var msg = {
+                code: 404,
+                msg: 'Airline not found'
+            };
+            res.end(JSON.stringify(msg));
         }else{
 
             var options = {
@@ -183,6 +211,7 @@ router.get('reservation/:airline/:reservationId', function(req,res){
                 host: airline.URL,
                 path: restPath+req.params.reservationId
             };
+            console.log('res/:airline/:id GET: '+options.host+options.path);
             http.get(options, function(resp){
 
                 resp.on('data', function(body){
@@ -201,7 +230,7 @@ router.get('reservation/:airline/:reservationId', function(req,res){
     });
 });
 
-router.delete('reservation/:airline/:reservationId', function(req,res){
+router.delete('/reservation/:airline/:reservationId', function(req,res){
 
     res.setHeader('Content-Type', 'application/json');
     Airlines.findOne({airline: req.params.airline}, function(err, airline){
@@ -210,6 +239,13 @@ router.delete('reservation/:airline/:reservationId', function(req,res){
             var msg = {
                 code: 500,
                 msg: err.message
+            };
+            res.end(JSON.stringify(msg));
+        }else if(typeof airline == 'undefined'||airline==null){
+
+            var msg = {
+                code: 404,
+                msg: 'Airline not found'
             };
             res.end(JSON.stringify(msg));
         }else{

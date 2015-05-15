@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var User = require('mongoose').model('User');
+var Airlines = require('mongoose').model('Airline');
 var bcrypt = require('bcryptjs');
 var nodemailer = require('nodemailer');
 var uuid = require('uuid');
@@ -111,5 +112,12 @@ router.get('/partials/:partialName', function (req, res) {
     var name = req.params.partialName;
     res.render('partials/' + name);
 });
+/**
+ *
+ *
+ *
+ *
+ * **/
+
 
 module.exports = router;
