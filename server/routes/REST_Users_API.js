@@ -1,10 +1,18 @@
 var express = require('express');
 var http = require('http');
+var request = require('request');
 var mongoose = require('mongoose');
 var Airlines = mongoose.model('Airline');
 
 var restArr = [];
 var restPath = '/api/flights/';
+
+//for tests
+var nock;
+if(global.SKIP_AUTHENTICATION){
+    nock = require('nock');
+    nock.enableNetConnect();
+}
 restArr.push({
 
     airline: 'MMJ',
@@ -19,6 +27,16 @@ router.get('/test', function(req, res) {
 
 router.get('/flights/:airport/:date', function(req,res){
 
+    var nocked;
+    if(global.SKIP_AUTHENTICATION){
+
+        nocked = nock('http://airline-mich1104.rhcloud.com')
+            .get('/api/flights/CPH/123456')
+            .reply(200, {
+
+                testCompleted: true
+            });
+    }
     var jsonArr = [];
     res.setHeader('Content-Type', 'application/json');
     Airlines.find({}, function(err, airlines){
@@ -30,7 +48,7 @@ router.get('/flights/:airport/:date', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
-        }else if(typeof airline == 'undefined'||airline==null){
+        }else if(typeof airlines == 'undefined'||airlines==null){
 
             var msg = {
                 code: 500,
@@ -49,10 +67,11 @@ router.get('/flights/:airport/:date', function(req,res){
                     host: element.URL,
                     path: restPath+req.params.airport+'/'+req.params.date
                 };
-                console.log('asd path: '+options.path+' on '+options.host+': ');
+                var getURL = options.host+restPath+req.params.airport+'/'+req.params.date
+                console.log('asd path: '+options.path+' on '+options.host+': ' + getURL+': getURL');
                 http.get(options, function(resp){
                     console.log('asd host: ', options);
-                    resp.on('data', function(body){
+                    resp.addListener('data', function(body){
 
                         console.log('asd body:'+body);
                         body.forEach(function(flight){
@@ -62,10 +81,12 @@ router.get('/flights/:airport/:date', function(req,res){
                         });
                         counter++;
                     });
-                }).on('error', function(e){
-                    counter++;
-                    console.log('Error getting '+options.path+' on '+options.host+': '+ e);
+                    resp.addListener('error', function(e){
+                        counter++;
+                        console.log('Error getting '+options.path+' on '+options.host+': '+ e);
+                    });
                 });
+
             });
             var respond = true;
             while(respond){
@@ -91,7 +112,7 @@ router.get('/flights/:from/:to/:date', function(req,res){
                 msg: err.message
             };
             res.end(JSON.stringify(msg));
-        }else if(typeof airline == 'undefined'||airline==null){
+        }else if(typeof airlines == 'undefined'||airlines==null){
 
             var msg = {
                 code: 500,

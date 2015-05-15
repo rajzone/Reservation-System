@@ -1,11 +1,47 @@
 <div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>
-<p>This is the partial for view 2.</p>
-<p style="color: darkgreen">Partial (view2.html) is located in the folder for this view (app/view2)</p>
-<br/>
 <p style="color: #105cb6">
 
   {{info.msg}}
+
 </p>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>API path</th>
+                <th>Request type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>/flights/:airport/:date</td>
+                <td>GET</td>
+                <td>Returns a list of flights gathered from the different airlines based on start airport and date</td>
+            </tr>
+            <tr>
+                <td>/flights/:airport/:date</td>
+                <td>GET</td>
+                <td>Returns a list of flights gathered from the different airlines based on both start and end airports and date of departure</td>
+            </tr>
+            <tr>
+                <td>/reservation/:airline/:reservationId</td>
+                <td>GET</td>
+                <td>Returns the corresponding reservation</td>
+            </tr>
+            <tr>
+                <td>/reservation/:airline/:flightId</td>
+                <td>POST</td>
+                <td>Reserves(buys) tickets for the corresponding flight. Payload: List of passengers as JSON</td>
+            </tr>
+            <tr>
+                <td>/reservation/:airline/:reservationId</td>
+                <td>DELETE</td>
+                <td>Deletes the corresponding reservation</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
 

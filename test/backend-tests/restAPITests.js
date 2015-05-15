@@ -6,6 +6,7 @@ var mocha = require('mocha');
 var should = require("should");
 var app = require("../../server/app");
 var http = require("http");
+var request = require('request');
 var testPort = 9999;
 var testServer;
 var mongoose = require("mongoose");
@@ -64,22 +65,31 @@ describe('REST API for users', function () {
                   port: 9999,
                   path: '/userApi/flights/CPH/123456'
               };
+
               http.get(options, function(resp){
 
-                  resp.on('data', function(data){
+                  resp.addListener('data', function(body){
 
-                      console.log('asd',data);
-                      console.log('asd2', resp.data);
                       true.should.equal(true);
-                      done();
                   });
-              }).on('error', function(err){
+                  resp.addListener('error', function(err){
 
-                  console.log(err.message);
-                  true.should.equal(false);
-                  done();
+                      true.should.equal(false);
+                  });
               });
 
+              /**
+              request.get('http://127.0.0.1:9999/userApi/flights/CPH/123456')
+                  .on('response', function(response){
+
+                      console.log('testWOOOOO');
+                      true.should.equal(true);
+                  })
+                  .on('error', function(error){
+
+                      console.log('testWOOP fail');
+                      false.should.equal(true);
+                  });**/
           });
       });
       describe('/flights/:from/:to/:date', function(){
