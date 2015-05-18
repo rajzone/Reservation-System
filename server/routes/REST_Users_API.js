@@ -4,20 +4,8 @@ var request = require('request');
 var mongoose = require('mongoose');
 var Airlines = mongoose.model('Airline');
 
-var restArr = [];
 var restPath = '/api/flights/';
 
-//for tests
-var nock;
-if(global.SKIP_AUTHENTICATION){
-    nock = require('nock');
-    nock.enableNetConnect();
-}
-restArr.push({
-
-    airline: 'MMJ',
-    URL:'http://airline-mich1104.rhcloud.com'
-});
 
 var router = express.Router();
 router.get('/test', function(req, res) {
@@ -27,16 +15,7 @@ router.get('/test', function(req, res) {
 
 router.get('/flights/:airport/:date', function(req,res){
 
-    var nocked;
-    if(global.SKIP_AUTHENTICATION){
 
-        nocked = nock('http://airline-mich1104.rhcloud.com')
-            .get('/api/flights/CPH/123456')
-            .reply(200, {
-
-                testCompleted: true
-            });
-    }
     var jsonArr = [];
     res.setHeader('Content-Type', 'application/json');
     Airlines.find({}, function(err, airlines){
@@ -69,32 +48,24 @@ router.get('/flights/:airport/:date', function(req,res){
                 };
                 var getURL = options.host+restPath+req.params.airport+'/'+req.params.date
                 console.log('asd path: '+options.path+' on '+options.host+': ' + getURL+': getURL');
-                http.get(options, function(resp){
-                    console.log('asd host: ', options);
-                    resp.addListener('data', function(body){
+                request(getURL, function(error,response,body){
 
-                        console.log('asd body:'+body);
-                        body.forEach(function(flight){
+                    console.log(body);
+                    if(!error){
+                        var bodyArr = JSON.parse(body);
+                        bodyArr.forEach(function(element){
 
-                            jsonArr.push(flight);
-                            console.log('asd',jsonArr);
+                            console.log(element);
+                            jsonArr.push(element);
                         });
-                        counter++;
-                    });
-                    resp.addListener('error', function(e){
-                        counter++;
-                        console.log('Error getting '+options.path+' on '+options.host+': '+ e);
-                    });
+                        res.end(JSON.stringify(jsonArr));
+                        console.log(jsonArr,'jsonArr');
+                    }
                 });
 
             });
-            var respond = true;
-            while(respond){
-                if(counter === totalAirlines){
-                    res.end(JSON.stringify(jsonArr));
-                    respond = false;
-                }
-            }
+
+            console.log(jsonArr+'jsonArr');
         }
     });
 });

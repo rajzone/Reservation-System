@@ -24,4 +24,28 @@ angular.module('myAppRename.view2', ['ngRoute'])
         }
         $scope.error = data;
       });
+
+        $scope.flightList = "";
+        $scope.startAirport = "";
+        $scope.endAirport= "";
+        $scope.date = "";
+        $scope.firstForm = {};
+        $scope.firstForm.submitForm = function(){
+
+        var pathStr = "userApi/flights/"+$scope.firstForm.startAirport+"/"+$scope.firstForm.date;
+        $http({
+
+            method: 'GET',
+            url:pathStr
+        })
+            .success(function(data,status,headers,config){
+
+                $scope.flightList = data;
+                console.log(data+'dataASD');
+            })
+            .error(function(data,status,headers,config){
+
+                $scope.flightList = 'some effin error occured';
+            });
+        }
   }]);
