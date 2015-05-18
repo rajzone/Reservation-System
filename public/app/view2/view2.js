@@ -30,6 +30,7 @@ angular.module('myAppRename.view2', ['ngRoute'])
         $scope.endAirport= "";
         $scope.date = "";
         $scope.firstForm = {};
+        $scope.getReservationForm = {};
         $scope.firstForm.submitForm = function(){
 
         var pathStr = "userApi/flights/"+$scope.firstForm.startAirport+"/"+$scope.firstForm.date;
@@ -47,5 +48,24 @@ angular.module('myAppRename.view2', ['ngRoute'])
 
                 $scope.flightList = 'some effin error occured';
             });
+        }
+        $scope.getReservationForm.submitForm = function(){
+
+            var pathStr = "userApi/reservation/"+'MMJ'+"/"+$scope.getReservationForm.getThisID;
+            $http({
+
+                method: 'GET',
+                url:pathStr
+            })
+                .success(function(data,status,headers,config){
+
+                    $scope.getReservationForm.reservationx = data;
+                    console.log(data+'dataASD');
+                })
+                .error(function(data,status,headers,config){
+
+                    console.log('data error', status);
+                    $scope.getReservationForm.reservationx = data.toString();
+                });
         }
   }]);

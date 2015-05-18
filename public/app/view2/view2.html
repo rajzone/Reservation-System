@@ -60,5 +60,16 @@
         <br/>
         {{flightList}}
     </div>
+    <div>
+        <form ng-submit="getReservationForm.submitForm()">
+            <div>
+                <input type="text" ng-model="getReservationForm.getThisID" placeholder="reservation ID">
+            </div>
+            <div>
+                <button type="submit" ngClick="Submit">get reservation</button>
+            </div>
+        </form>
+        {{getReservationForm.reservationx}}
+    </div>
 </div>
 

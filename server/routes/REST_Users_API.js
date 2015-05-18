@@ -60,6 +60,13 @@ router.get('/flights/:airport/:date', function(req,res){
                         });
                         res.end(JSON.stringify(jsonArr));
                         console.log(jsonArr,'jsonArr');
+                    }else{
+
+                        var msg = {
+                            code: 500,
+                            msg: error.message
+                        };
+                        res.end(JSON.stringify(msg));
                     }
                 });
 
@@ -120,13 +127,6 @@ router.get('/flights/:from/:to/:date', function(req,res){
                     console.log('Error getting '+options.path+' on '+options.host+': '+ e);
                 });
             });
-            var respond = true;
-            while(respond){
-                if(counter === totalAirlines){
-                    res.end(JSON.stringify(jsonArr));
-                    respond = false;
-                }
-            }
         }
     });
 });
@@ -204,19 +204,22 @@ router.get('/reservation/:airline/:reservationId', function(req,res){
                 path: restPath+req.params.reservationId
             };
             console.log('res/:airline/:id GET: '+options.host+options.path);
-            http.get(options, function(resp){
+            var getURL = options.host+options.path;
+            console.log('getURL: '+getURL);
+            request(getURL, function(error,response,body){
 
-                resp.on('data', function(body){
 
+                if(!error){
+                    console.log(body);
                     res.end(body);
-                });
-            }).on('error', function(err){
+                }else{
 
-                var msg = {
-                    code: 502,
-                    msg: err.message
-                };
-                res.end(JSON.stringify(msg))
+                    var msg = {
+                        code: 500,
+                        msg: error.message
+                    };
+                    res.end(JSON.stringify(msg));
+                }
             });
         }
     });
