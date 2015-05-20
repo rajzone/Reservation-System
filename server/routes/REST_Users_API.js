@@ -58,15 +58,24 @@ router.get('/flights/:airport/:date', function(req,res){
                             console.log(element);
                             jsonArr.push(element);
                         });
-                        res.end(JSON.stringify(jsonArr));
+                        counter = counter+1;
+
                         console.log(jsonArr,'jsonArr');
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     }else{
 
+                        counter = counter+1;
                         var msg = {
                             code: 500,
-                            msg: error.message
+                            msg: 'No flights'
                         };
-                        res.end(JSON.stringify(msg));
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     }
                 });
 
@@ -120,11 +129,19 @@ router.get('/flights/:from/:to/:date', function(req,res){
                             jsonArr.push(flight);
                             console.log('asd',jsonArr);
                         });
-                        counter++;
+                        counter = counter+1;
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     });
                 }).on('error', function(e){
-                    counter++;
+                    counter=counter+1;
                     console.log('Error getting '+options.path+' on '+options.host+': '+ e);
+                    if(counter===totalAirlines){
+
+                        res.end(JSON.stringify(jsonArr));
+                    }
                 });
             });
         }
