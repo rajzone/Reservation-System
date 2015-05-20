@@ -30,6 +30,7 @@
           <li><a href="#/view3" >Admins only</a></li>
           <!--<li><a href="#/view3" ng-show="isAdmin">Admins only (teachers)</a></li>-->
           <li><a href="#/view4" ng-show="!isAuthenticated" >Register</a></li>
+          <li><a href="#/viewTickets" ng-show="isAuthenticated">View Tickets</a></li>
         </ul>
 
         <form class="navbar-form navbar-right" role="form" ng-show="!isAuthenticated" ng-submit="submit()">
@@ -70,5 +71,6 @@
 <script src="app/components/factories.js"></script>
 <script src="app/components/services.js"></script>
 <script src="app/components/filters.js"></script>
+<script src="app/viewTickets/viewTickets.js"></script>
 </body>
 </html>
