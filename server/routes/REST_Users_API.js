@@ -17,6 +17,7 @@ router.get('/test', function(req, res) {
 
 router.get('/tickets/:username', function(req,res){
 
+
     Users.findOne({username: req.params.username}, function(err,user){
         res.setHeader('Content-Type', 'application/json')
         if(err){
@@ -29,7 +30,14 @@ router.get('/tickets/:username', function(req,res){
             res.End(JSON.stringify(errObj));
         }else{
 
-            Tickets.find({user: user._id}, function(err,tickets){
+            /*
+            var testTicket = new Tickets();
+            testTicket.user = user._id;
+            testTicket.airline = 'MMJ';
+            testTicket.passengers = 3;
+            testTicket.save();
+            */
+            Tickets.find({user: user._id},'airline passengers -_id', function(err,tickets){
 
                 if(err){
 

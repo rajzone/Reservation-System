@@ -8,11 +8,11 @@
     <h2>Reservations on this account</h2>
     <div ng-show="noTicketsFound">
         <p>No tickets found</p>
-        <ul class="list-group">
-            <li ng-repeat="reservation in tickets">Reservation: {{reservation}}</li>
-        </ul>
     </div>
     <div ng-show="!noTicketsFound">
         <p>Tickets found</p>
+        <ul class="list-group">
+            <li ng-repeat="reservation in tickets">Reservation: {{reservation}}</li>
+        </ul>
     </div>
 </div>
