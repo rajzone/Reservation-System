@@ -68,7 +68,8 @@ var ticketSchema = new mongoose.Schema({
 
     user: {type: Schema.Types.ObjectId, ref: 'User'},
     airline: String,
-    passengers: Number
+    passengers: Number,
+    airlineResId: Number
 
 });
 mongoose.model('Tickets', ticketSchema, 'tickets');

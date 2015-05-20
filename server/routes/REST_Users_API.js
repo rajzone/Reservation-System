@@ -37,7 +37,7 @@ router.get('/tickets/:username', function(req,res){
             testTicket.passengers = 3;
             testTicket.save();
             */
-            Tickets.find({user: user._id},'airline passengers -_id', function(err,tickets){
+            Tickets.find({user: user._id},'airline passengers airlineResId -_id', function(err,tickets){
 
                 if(err){
 

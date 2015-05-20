@@ -40,6 +40,25 @@ angular.module('myAppRename.viewTickets', ['ngRoute'])
 
                         $scope.error = 'An error occured getting your reservations';
                     });
+                $scope.getDetails = function(airline, resId){
+
+                    console.log('airlineResIdSSOMETHING asd'+airline+resId);
+                    $http({
+                        method: 'GET',
+                        url: 'userApi/reservation/'+airline+'/'+resId
+                    })
+                        .success(function(data,status,headers,config){
+
+                            $scope.showDetailsOnWebsite = true;
+                            $scope.reservationDetails = data;
+                        })
+                        .error(function(data,status,headers,config){
+
+                            $scope.showDetailsOnWebsite = false;
+                            $scope.error = 'An error occured getting the details of your reservation';
+                        });
+                    $scope.details = true;
+                }
             }).
             error(function (data, status, headers, config) {
                 if (status == 401) {
