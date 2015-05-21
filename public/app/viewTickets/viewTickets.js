@@ -23,7 +23,7 @@ angular.module('myAppRename.viewTickets', ['ngRoute'])
                 $scope.error = null;
                 $http({
                     method: 'GET',
-                    url: 'userApi/tickets/michael'
+                    url: 'userApi/tickets/'+$scope.username
                 })
                     .success(function(data, status,headers,config){
 
