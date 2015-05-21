@@ -44,12 +44,10 @@
             <td>{{flight.depature}}</td>
             <td>{{flight.destination}}</td>
             <td>{{flight.bookedseats}}</td>
-            <td>{{flight.departuredate}}</td>
-            <td>{{flight.arrivaldate}}</td>
-            <td>{{flight.price}}</td>
+            <td>{{flight.departuredate * 1000 | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+            <td>{{flight.arrivaldate * 1000 | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+            <td>{{flight.price | currency:eur}}</td>
         </tr>
     </table>
-
-    <p>{{flightList}}</p>
 
 </div>

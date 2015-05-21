@@ -19,7 +19,7 @@ router.get('/tickets/:username', function(req,res){
 
 
     Users.findOne({username: req.params.username}, function(err,user){
-        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Content-Type', 'application/json');
         if(err){
 
             var errObj = {
@@ -63,7 +63,7 @@ router.get('/flights/:airport/:date', function(req,res){
     res.setHeader('Content-Type', 'application/json');
     Airlines.find({}, function(err, airlines){
 
-        console.log('asd airlines from mongo:', airlines);
+        //console.log('asd airlines from mongo:', airlines);
         if(err){
             var msg = {
                 code: 500,
@@ -78,22 +78,24 @@ router.get('/flights/:airport/:date', function(req,res){
             };
             res.end(JSON.stringify(msg));
         }else{
-            console.log('asd REST_userblah else');
+            //console.log('asd REST_userblah else');
             var counter = 0;
             var totalAirlines = airlines.length;
             airlines.forEach(function(element){
 
-                console.log('asd element airlines',element);
+                //console.log('asd element airlines',element);
                 var options = {
 
                     host: element.URL,
                     path: restPath+req.params.airport+'/'+req.params.date
                 };
                 var getURL = options.host+restPath+req.params.airport+'/'+req.params.date
-                console.log('asd path: '+options.path+' on '+options.host+': ' + getURL+': getURL');
+                //console.log('asd path: '+options.path+' on '+options.host+': ' + getURL+': getURL');
+
+                //console.log(getURL);
                 request(getURL, function(error,response,body){
 
-                    console.log(body);
+                    //console.log(body);
                     if(!error){
                         var bodyArr = JSON.parse(body);
                         if(bodyArr.constructor === Array){
@@ -106,7 +108,7 @@ router.get('/flights/:airport/:date', function(req,res){
 
                         counter = counter+1;
 
-                        console.log(jsonArr,'jsonArr');
+                        //console.log(jsonArr,'jsonArr');
                         if(counter===totalAirlines){
 
                             res.end(JSON.stringify(jsonArr));
@@ -124,10 +126,7 @@ router.get('/flights/:airport/:date', function(req,res){
                         }
                     }
                 });
-
             });
-
-            console.log(jsonArr+'jsonArr');
         }
     });
 });
@@ -138,7 +137,6 @@ router.get('/flights/:from/:to/:date', function(req,res){
     res.setHeader('Content-Type', 'application/json');
     Airlines.find({}, function(err, airlines){
 
-        console.log('asd airlines from mongo:', airlines);
         if(err){
             var msg = {
                 code: 500,
@@ -153,43 +151,39 @@ router.get('/flights/:from/:to/:date', function(req,res){
             };
             res.end(JSON.stringify(msg));
         }else{
-            console.log('asd REST_userblah else');
+
             var counter = 0;
             var totalAirlines = airlines.length;
             airlines.forEach(function(element){
 
-                console.log('asd element airlines',element);
-                var options = {
+                var getURL = element.URL+restPath+req.params.from+'/'+req.params.to+'/'+req.params.date;
 
-                    host: element.URL,
-                    path: restPath+req.params.from+'/'+req.params.to+'/'+req.params.date
-                };
-                console.log('asd path: '+options.path+' on '+options.host+': ');
-                http.get(options, function(resp){
-                    console.log('asd host: ', options);
-                    resp.on('data', function(body){
+                request(getURL, function(error,response,body){
+                    //console.log(body);
+                    if(!error){
 
-                        console.log('asd body:'+body);
-                        if(body.constructor === Array){
-                            body.forEach(function(element){
+                        var result = JSON.parse(body);
 
-                                console.log(element);
+                        console.log(JSON.parse(body) instanceof Array);
+                        if(result instanceof Array){
+                            console.log("Pushing to array");
+                            result.forEach(function(element){
                                 jsonArr.push(element);
                             });
                         }
                         counter = counter+1;
                         if(counter===totalAirlines){
+                            res.end(JSON.stringify(jsonArr));
+                        }
+                    }else{
+                        counter=counter+1;
+                        //console.log('Error getting '+options.path+' on '+options.host+': '+ e);
+                        if(counter===totalAirlines){
 
                             res.end(JSON.stringify(jsonArr));
                         }
-                    });
-                }).on('error', function(e){
-                    counter=counter+1;
-                    console.log('Error getting '+options.path+' on '+options.host+': '+ e);
-                    if(counter===totalAirlines){
-
-                        res.end(JSON.stringify(jsonArr));
                     }
+
                 });
             });
         }
