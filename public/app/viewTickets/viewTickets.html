@@ -1,9 +1,4 @@
 <div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>
-<p style="color: #105cb6">
-
-    {{info.msg}}
-
-</p>
 <div style="width: 100%; overflow:auto;">
     <div ng-show="isAuthenticated">
         <h2>Reservations on this account</h2>
@@ -28,14 +23,14 @@
             <div style="float:right; width:48%; margin-left: 2%">
                 <div ng-show="showDetailsOnWebsite" class="jumbotron">
                     Details found:
-                    <p>ReservationId: {{reservationDetails.ReservationId}}</p>
+                    <p>ReservationId: <span ng-show="reservationDetails.ReservationId!=null">{{reservationDetails.ReservationId}}</span><span ng-show="reservationDetails.reservationID!=null">{{reservationDetails.reservationID}}</span><span ng-show="reservationDetails.reservationId!=null">{{reservationDetails.reservationId}}</span><span ng-show="reservationDetails.ReservationID!=null">{{reservationDetails.ReservationID}}</span></p>
                     <p>Passengers:
                         <ul>
                             <li ng-repeat="passenger in reservationDetails.Passengers">
                                 <span ng-show="passenger.Name!=null">{{passenger.Name}}</span><span ng-show="passenger.lastName != null">{{passenger.lastName}}, {{passenger.firstName}}</span><br/>
-                                {{passenger.Address}}<br/>
-                                {{passenger.City}}<br/>
-                                {{passenger.Country}}<br/>
+                                <span ng-show="passenger.Address!=null">{{passenger.Address}}</span><span ng-show="passenger.street!=null">{{passenger.street}}</span><br/>
+                                <span ng-show="passenger.City!=null">{{passenger.City}}</span><span ng-show="passenger.city!=null">{{passenger.city}}</span><br/>
+                                <span ng-show="passenger.Country!=null">{{passenger.Country}}</span><span ng-show="passenger.country!=null">{{passenger.country}}</span><br/>
                             </li>
                         </ul>
                     </p>
