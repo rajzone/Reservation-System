@@ -1,0 +1,55 @@
+<div class="searchForm">
+    <h1>Choose your destination</h1>
+
+    <div class="row-fluid">
+        <form ng-submit="search.submit()" class="form-horizontal">
+            <div class="form-group col-md-2 col-md-offset-1">
+                <label for="departure_label">Departure</label>
+                <input type="text" ng-model="search.departure" class="form-control" id="departure_label" placeholder="Departure">
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="destination_label">Destination</label>
+                <input type="text" ng-model="search.destination" class="form-control" id="destination_label" placeholder="Destination">
+            </div>
+
+            <div class="form-group col-md-2">
+                <label data-fmt="" for="departure_date_label">Departure date</label>
+                <input type="date" ng-model="search.departure_date" class="form-control" id="departure_date_label">
+            </div>
+
+            <div class="btn-group col-md-2">
+                <label for="search_label">Destination date</label>
+                <button type="submit" class="btn btn-danger" id="search_label" ngClick="Submit">Search for flights</button>
+            </div>
+
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Airline</th>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Available Seats</th>
+            <th>Departure Date</th>
+            <th>Arrival Date</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="flight in flightList">
+            <td>{{flight.AirlineName}}</td>
+            <td>{{flight.depature}}</td>
+            <td>{{flight.destination}}</td>
+            <td>{{flight.bookedseats}}</td>
+            <td>{{flight.departuredate}}</td>
+            <td>{{flight.arrivaldate}}</td>
+            <td>{{flight.price}}</td>
+        </tr>
+    </table>
+
+    <p>{{flightList}}</p>
+
+</div>
