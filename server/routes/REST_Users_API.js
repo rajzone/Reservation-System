@@ -3,6 +3,8 @@ var http = require('http');
 var request = require('request');
 var mongoose = require('mongoose');
 var Airlines = mongoose.model('Airline');
+var Users = mongoose.model('User');
+var Tickets = mongoose.model('Tickets');
 
 var restPath = '/api/flights/';
 
@@ -11,6 +13,47 @@ var router = express.Router();
 router.get('/test', function(req, res) {
     res.header("Content-type","application/json");
     res.end('{"msg" : "Test Message fetched from the server, You are logged on as a User since you could fetch this data"}');
+});
+
+router.get('/tickets/:username', function(req,res){
+
+
+    Users.findOne({username: req.params.username}, function(err,user){
+        res.setHeader('Content-Type', 'application/json')
+        if(err){
+
+            var errObj = {
+
+                err: 'No user found',
+                errMsg: err.message
+            };
+            res.End(JSON.stringify(errObj));
+        }else{
+
+            /*
+            var testTicket = new Tickets();
+            testTicket.user = user._id;
+            testTicket.airline = 'MMJ';
+            testTicket.passengers = 3;
+            testTicket.save();
+            */
+            Tickets.find({user: user._id},'airline passengers airlineResId -_id', function(err,tickets){
+
+                if(err){
+
+                    var errObj = {
+
+                        err: 'An error occurred',
+                        errMsg: err.message
+                    };
+                    res.end(JSON.stringify(errObj));
+                }else{
+
+                    res.end(JSON.stringify(tickets));
+                }
+            });
+        }
+    });
 });
 
 router.get('/flights/:airport/:date', function(req,res){
@@ -53,20 +96,32 @@ router.get('/flights/:airport/:date', function(req,res){
                     console.log(body);
                     if(!error){
                         var bodyArr = JSON.parse(body);
-                        bodyArr.forEach(function(element){
+                        if(bodyArr.constructor === Array){
+                            bodyArr.forEach(function(element){
 
-                            console.log(element);
-                            jsonArr.push(element);
-                        });
-                        res.end(JSON.stringify(jsonArr));
+                                console.log(element);
+                                jsonArr.push(element);
+                            });
+                        }
+
+                        counter = counter+1;
+
                         console.log(jsonArr,'jsonArr');
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     }else{
 
+                        counter = counter+1;
                         var msg = {
                             code: 500,
-                            msg: error.message
+                            msg: 'No flights'
                         };
-                        res.end(JSON.stringify(msg));
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     }
                 });
 
@@ -115,16 +170,26 @@ router.get('/flights/:from/:to/:date', function(req,res){
                     resp.on('data', function(body){
 
                         console.log('asd body:'+body);
-                        body.forEach(function(flight){
+                        if(body.constructor === Array){
+                            body.forEach(function(element){
 
-                            jsonArr.push(flight);
-                            console.log('asd',jsonArr);
-                        });
-                        counter++;
+                                console.log(element);
+                                jsonArr.push(element);
+                            });
+                        }
+                        counter = counter+1;
+                        if(counter===totalAirlines){
+
+                            res.end(JSON.stringify(jsonArr));
+                        }
                     });
                 }).on('error', function(e){
-                    counter++;
+                    counter=counter+1;
                     console.log('Error getting '+options.path+' on '+options.host+': '+ e);
+                    if(counter===totalAirlines){
+
+                        res.end(JSON.stringify(jsonArr));
+                    }
                 });
             });
         }

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 /* How To Create A User In Database */
 
@@ -61,9 +62,20 @@ var usersSchema = new mongoose.Schema({
     verified: {type: String, required: true},
     created: {type: Date, default: new Date()}
 }, {versionKey: false});
+mongoose.model('User', usersSchema, "users");
+
+var ticketSchema = new mongoose.Schema({
+
+    user: {type: Schema.Types.ObjectId, ref: 'User'},
+    airline: String,
+    passengers: Number,
+    airlineResId: Number
+
+});
+mongoose.model('Tickets', ticketSchema, 'tickets');
+
 var airlineSchema = new mongoose.Schema({
     airline: {type:String, unique: true, required:true},
     URL: {type:String, unique:true, required:true}
 });
-mongoose.model('User', usersSchema, "users");
 mongoose.model('Airline', airlineSchema, "airlines");

@@ -1,0 +1,23 @@
+<div class="alert alert-danger" role="alert" ng-show="error">{{error}}</div>
+<p style="color: #105cb6">
+
+    {{info.msg}}
+
+</p>
+<div ng-show="isAuthenticated">
+    <h2>Reservations on this account</h2>
+    <div ng-show="noTicketsFound">
+        <p>No tickets found for this account</p>
+    </div>
+    <div ng-show="!noTicketsFound">
+        <p>Tickets found</p>
+        <ul class="list-group">
+            <li ng-repeat="reservation in tickets">
+                <a ng-click="getDetails(reservation.airline, reservation.airlineResId)">Reservation: {{reservation}}</a>
+            </li>
+        </ul>
+        <div>
+            <p ng-show="showDetailsOnWebsite">Details found: {{reservationDetails}}</p>
+        </div>
+    </div>
+</div>

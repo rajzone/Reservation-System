@@ -12,7 +12,8 @@ angular.module('myAppRename', [
   'myAppRename.view2',
   'myAppRename.view3',
   'myAppRename.view4',
-  'myAppRename.view5'
+  'myAppRename.view5',
+  'myAppRename.viewTickets'
 ]).
 config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/view1'});
