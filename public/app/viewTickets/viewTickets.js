@@ -42,6 +42,7 @@ angular.module('myAppRename.viewTickets', ['ngRoute'])
                     });
                 $scope.getDetails = function(airline, resId){
 
+                    $scope.reservationDetails = null;
                     console.log('airlineResIdSSOMETHING asd'+airline+resId);
                     $http({
                         method: 'GET',
@@ -49,6 +50,7 @@ angular.module('myAppRename.viewTickets', ['ngRoute'])
                     })
                         .success(function(data,status,headers,config){
 
+                            console.log(data);
                             $scope.showDetailsOnWebsite = true;
                             $scope.reservationDetails = data;
                         })
@@ -58,6 +60,26 @@ angular.module('myAppRename.viewTickets', ['ngRoute'])
                             $scope.error = 'An error occured getting the details of your reservation';
                         });
                     $scope.details = true;
+                }
+                $scope.delete = function(airline, resId){
+
+                    if(confirm('Are you sure you want to delete this reservation?')){
+                        console.log('Confirmed');
+                        console.log(airline+'/'+resId);
+                        $http({
+                            method: 'DELETE',
+                            url: 'userApi/reservation/'+resId
+                        })
+                            .success(function(data,status,headers,config){
+
+                                $scope.reservationDetails=null;
+                                alert('Reservation removed');
+                            })
+                            .error(function(data,status,headers,config){
+
+                                alert('Reservation not removed');
+                            });
+                    }
                 }
             }).
             error(function (data, status, headers, config) {

@@ -164,11 +164,13 @@ router.get('/flights/:from/:to/:date', function (req, res) {
 
                         var result = JSON.parse(body);
 
+                        console.log('result:',result);
                         console.log(JSON.parse(body) instanceof Array);
                         if (result instanceof Array) {
                             console.log("Pushing to array");
                             result.forEach(function (element) {
                                 jsonArr.push(element);
+                                console.log(element);
                             });
                         }
                         counter = counter + 1;
