@@ -10,7 +10,7 @@ angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
                 templateUrl: 'app/view5/view5.html',
                 controller: 'View2Ctrl'
             });
-    }]).controller('View2Ctrl', ['$scope', '$http', '$modal', '$log', function ($scope, $http, $modal, $log) {
+    }]).controller('View2Ctrl', ['$scope', '$http', '$modal', '$log', 'reservationFactory', function ($scope, $http, $modal, $log, reservationFactory) {
         $http({
             method: 'GET',
             url: 'userApi/test'
@@ -62,13 +62,15 @@ angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
             });
         };
 
-        $scope.open = function (size) {
+        $scope.open = function (flightid, airline) {
+
+            reservationFactory.flightID = flightid;
+            reservationFactory.airline = airline;
 
             modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'app/view5/modal.html',
-                controller: 'ModalCtrl',
-                size: size
+                controller: 'ModalCtrl'
             });
 
             modalInstance.result.then(function (selectedItem) {
@@ -79,10 +81,29 @@ angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
         };
 
 
-    }]).controller('ModalCtrl', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
+    }]).controller('ModalCtrl', ['$scope', '$modal', '$log', '$http', 'reservationFactory', function ($scope, $modal, $log, $http, reservationFactory) {
 
         $scope.purchase = function () {
-            console.log('Tickets purchased');
+            var payload = [{
+                firstName: $scope.firstName,
+                lastName: $scope.lastName,
+                city: $scope.city,
+                country: $scope.country,
+                street: $scope.street
+            }];
+
+            var pathStr = "userApi/reservation/" + 'MMJ' + "/" + reservationFactory.flightID;
+
+            $http.post(pathStr, payload).
+                success(function (data, status, headers, config) {
+                    console.log('Reservation Successful');
+                    console.log(data);
+                }).
+                error(function (data, status, headers, config) {
+                    console.log('Reservation unsuccessful');
+                    console.log(data);
+                });
+
             modalInstance.close();
         };
 
@@ -90,4 +111,10 @@ angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
             modalInstance.dismiss();
         };
 
-    }]);
+    }]).
+    factory('reservationFactory', function () {
+        var reservationData = [];
+        reservationData.flightID = '';
+        reservationData.airline = '';
+        return reservationData;
+    });

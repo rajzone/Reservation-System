@@ -47,7 +47,7 @@
             <td>{{flight.takeOffDate * 1000 | date:'dd-MM-yyyy HH:mm'}}</td>
             <td>{{flight.landingDate * 1000 | date:'dd-MM-yyyy HH:mm'}}</td>
             <td>{{flight.price | currency}}</td>
-            <td><button class="btn btn-default" ng-click="open()">Book</button></td>
+            <td><button class="btn btn-default" ng-click="open(flight.flightid, flight.airline)">Book</button></td>
         </tr>
     </table>
 
