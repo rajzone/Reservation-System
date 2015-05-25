@@ -1,13 +1,16 @@
 'use strict';
 
-angular.module('myAppRename.view5', ['ngRoute'])
+var modalInstance = null;
+
+angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/view5', {
-            templateUrl: 'app/view5/view5.html',
-            controller: 'View2Ctrl'
-        });
-    }]).controller('View2Ctrl', ['$scope', '$http', function ($scope, $http) {
+        $routeProvider.
+            when('/view5', {
+                templateUrl: 'app/view5/view5.html',
+                controller: 'View2Ctrl'
+            });
+    }]).controller('View2Ctrl', ['$scope', '$http', '$modal', '$log', function ($scope, $http, $modal, $log) {
         $http({
             method: 'GET',
             url: 'userApi/test'
@@ -57,5 +60,34 @@ angular.module('myAppRename.view5', ['ngRoute'])
             }).error(function (data, status, headers, config) {
                 $scope.getReservationForm.reservationx = data.toString();
             });
-        }
+        };
+
+        $scope.open = function (size) {
+
+            modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'app/view5/modal.html',
+                controller: 'ModalCtrl',
+                size: size
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
+    }]).controller('ModalCtrl', ['$scope', '$modal', '$log', function ($scope, $modal, $log) {
+
+        $scope.purchase = function () {
+            console.log('Tickets purchased');
+            modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            modalInstance.dismiss();
+        };
+
     }]);
