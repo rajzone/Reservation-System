@@ -222,29 +222,35 @@ router.post('/reservation/:airline/:flightId', function (req, res) {
 
             var options = {
                 host: airline.URL,
-                path: restPath + req.params.flightId,
+                path: restPath+req.params.flightId,
                 method: 'POST',
-                port: 80,
                 headers: headers
             };
 
             console.log(options);
 
-            // Set up the request
-            var post_req = http.request(options, function(res) {
-                res.setEncoding('utf8');
-                res.on('data', function (chunk) {
-                    console.log('Response: ' + chunk);
-                });
-            });
+            request.post(
+                airline.URL+restPath+req.params.flightId,
+                payload,
+                function(error,response,body){
 
-            post_req.on('error', function(e) {
-                console.log('problem with request: ' + e.message);
-            });
+                    if(error){
 
-            // post the data
-            post_req.write(payload);
-            post_req.end();
+                        console.log('something went wrong when reserving your ticket');
+                    }else{
+
+                        console.log('Reservation complete. Check the "View Tickets" menu to view your reservation');
+                        Users.findOne({username: 'michael'}, function (err, user){
+
+                            var testTicket = new Tickets();
+                            testTicket.user = user._id;
+                            testTicket.airline = req.params.airline;
+                            testTicket.passengers = 1;
+                            testTicket.save();
+                        });
+                    }
+                }
+            );
         }
     });
 });

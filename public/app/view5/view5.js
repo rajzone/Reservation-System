@@ -94,7 +94,12 @@ angular.module('myAppRename.view5', ['ngRoute', 'ui.bootstrap'])
 
             var pathStr = "userApi/reservation/" + 'MMJ' + "/" + reservationFactory.flightID;
 
-            $http.post(pathStr, payload).
+            $http({
+
+                method: 'POST',
+                url: pathStr,
+                data: JSON.stringify(payload)
+            }).
                 success(function (data, status, headers, config) {
                     console.log('Reservation Successful');
                     console.log(data);
